@@ -1,0 +1,26 @@
+- name: ftpservers server
+  remote_user: root
+  hosts: ftpservers
+  vars:
+    packages: vsftpd
+  tasks:
+  - name: install httpd
+    yum: name={{ packages }} state=present
+    tags: install
+  - name: configuration vsftpd
+    copy: src=/root/vsftpd.conf dest=/etc/vsftpd/vsftpd.conf
+    tags: conf
+    notify:
+      - restart vsftpd  
+  - name: systemed vsftpd start  
+    systemd: name=vsftpd enabled=no state=started 
+    tags: start  
+  - name: add ftpuser1 and ftpuser2 user  
+    user: name={{ item }} state=absent 
+    tags: adduser  
+    with_items:  
+      - ftpuser1
+      - ftpuser2  
+  handlers:  
+  - name: restart vsftpd
+    systemd: name=vsftpd state=restarted  

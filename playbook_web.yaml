@@ -1,0 +1,55 @@
+---
+- name: webapps server
+  hosts: webapps 
+  vars:
+    packages: httpd
+  remote_user: root
+  tasks:
+  - name: install httpd 
+    yum: name={{ packages }} state=present
+    tags: install
+  - name: configuration httpd
+    copy: src=/root/httpd.conf dest=/etc/httpd/conf/httpd.conf
+    tags: conf
+    notify:
+      - restart httpd  
+  - name: systemed httpd start  
+    systemd: name=httpd enabled=no state=started 
+    tags: start  
+  - name: add centos and hadoop user  
+    user: name={{ item }} state=absent 
+    tags: adduser  
+    with_items:  
+      - centos  
+      - hadoop  
+  handlers:  
+    - name: restart httpd  
+      systemd: name=httpd state=restarted  
+
+- name: ftpservers server
+  remote_user: root
+  hosts: ftpservers
+  vars:
+    packages: vsftpd
+  tasks:
+  - name: install httpd
+    yum: name={{ packages }} state=present
+    tags: install
+  - name: configuration vsftpd
+    copy: src=/root/vsftpd.conf dest=/etc/vsftpd/vsftpd.conf
+    tags: conf
+    notify:
+      - restart vsftpd  
+  - name: systemed vsftpd start  
+    systemd: name=vsftpd enabled=no state=started 
+    tags: start  
+  - name: add ftpuser1 and ftpuser2 user  
+    user: name={{ item }} state=absent 
+    tags: adduser  
+    with_items:  
+      - ftpuser1
+      - ftpuser2  
+  handlers:  
+  - name: restart vsftpd
+    systemd: name=vsftpd state=restarted  
+...
