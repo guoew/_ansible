@@ -1,21 +1,21 @@
-ansible version = 2.5.0
-python version = 2.7.5
+#ansible version = 2.5.0
+#python version = 2.7.5
 
 
-epel repo
+#epel repo
 
 /etc/yum.repos.d/CentOS-Base.repo
 
 
 
-Complete file path for each file
+#Complete file path for each file
 
-Inentory file
+#Inentory file
 
-/etc/ansible/hosts  
+/etc/ansible/hosts  
 
 
-flaybook file
+#flaybook file
 
 /root/playbook_ftp.yaml 
 
@@ -24,7 +24,7 @@ flaybook file
 /root/playbook_web_ftp.yaml  
 
 
-configuration
+#configuration
 
 /root/vsftpd.conf
 
